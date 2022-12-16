@@ -58,6 +58,11 @@ client.on('interactionCreate', async interaction => {
 		const sayEmbed = new MessageEmbed().setColor(color).setTitle(`${interaction.user.username} said: ${target}`);
 		await interaction.reply({ embeds: [sayEmbed] })
 		logTxt(`${interaction.user.username} used /say to say "${target}"`);
+	} else if (commandName === 'logs') {
+		const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+		const logsEmbed = new MessageEmbed().setColor(0xCE2D4F).setTitle(`Logs at ${date}`);
+		await interaction.reply({ embeds: [logsEmbed], files: ["./log.txt"] })
+		logTxt(`${interaction.user.username} used /logs at ${date}`);
 	}
 });
 

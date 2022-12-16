@@ -8,12 +8,11 @@ const commands = [
 	new SlashCommandBuilder().setName('server').setDescription("Replies with server info!"),
 	new SlashCommandBuilder().setName('user').setDescription("Replies with user info!"),
 	new SlashCommandBuilder().setName('help').setDescription("Need some help?"),
-	new SlashCommandBuilder().setName('mute').setDescription("Mute user").addStringOption(option => option.setName('user').setDescription('User to mute').setRequired(true)),
 	new SlashCommandBuilder().setName('activity').setDescription("Adds Blastbot's activity").addStringOption(option => option.setName('activityoption').setDescription('Activity').setRequired(true)),
 	new SlashCommandBuilder().setName('apply').setDescription("Apply to help develop Blastbot"),
 	new SlashCommandBuilder().setName('ping').setDescription("See Blastbot's ping"),
 	new SlashCommandBuilder().setName('say').setDescription("Says message back to you").addStringOption(option => option.setName('message').setDescription('Message').setRequired(true)).addStringOption(option => option.setName('color').setDescription('Embed Color').setRequired(false)),
-	new SlashCommandBuilder().setName('join').setDescription("Apply to join Blastcraft")
+	new SlashCommandBuilder().setName('logs').setDescription("Get current log file")
 ]
 	.map(command => command.toJSON());
 

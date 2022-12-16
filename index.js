@@ -1,4 +1,4 @@
-const { Client, Intents, MessageEmbed, MessageActionRow, MessageSelectMenu, Modal, TextInputComponent, Message } = require('discord.js');
+const { Client, Intents, MessageEmbed, MessageActionRow, MessageSelectMenu, Modal, TextInputComponent } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs')
 
@@ -38,17 +38,6 @@ client.on('interactionCreate', async interaction => {
 		const helpEmbed = new MessageEmbed().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
 		await interaction.reply({ embeds: [helpEmbed], ephemeral: true})
 		logTxt(`${interaction.user.username} used /help`);
-	} else if (commandName === 'mute') {
-		const target = interaction.options.getString('user');
-		if (member.roles.cache.has('819014466065924146')) {
-			await interaction.reply({ content: `Muted ${user}`, ephemeral: true})
-			const role = interaction.options.getRole('MUTED');
-			const member = interaction.options.getMember('user');
-			member.roles.add(role);
-		} else {
-			await interaction.reply({ content: `You don't have the nessesary permissions`, ephemeral: true})
-		}
-		logTxt(`${interaction.user.username} used /mute`);
 	} else if (commandName === 'activity') {
 		const target = interaction.options.getString('activityoption');
 		await interaction.reply({ content: `Setting status ${target}`, ephemeral: true})
@@ -60,7 +49,8 @@ client.on('interactionCreate', async interaction => {
 		logTxt(`${interaction.user.username} used /apply`);
 	} else if (commandName === 'ping') {
 		const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-		interaction.editReply(`Websocket heartbeat: ${client.ws.ping}ms\nRoundtrip latency: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
+		const pingEmbed = new MessageEmbed().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️Websocket heartbeat:', value: `${client.ws.ping}`, inline: true }, { name: '⌛Roundtrip latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}`, inline: true });
+		interaction.editReply({ embeds: [pingEmbed] });
 		logTxt(`${interaction.user.username} used /ping`);
 	} else if (commandName === 'say') {
 		const target = interaction.options.getString('message');
@@ -68,24 +58,6 @@ client.on('interactionCreate', async interaction => {
 		const sayEmbed = new MessageEmbed().setColor(color).setTitle(`${interaction.user.username} said: ${target}`);
 		await interaction.reply({ embeds: [sayEmbed] })
 		logTxt(`${interaction.user.username} used /say to say "${target}"`);
-	} else if (commandName === 'join') {
-		const modal = new Modal()
-        .setCustomId('name')
-        .setTitle('What is your name?')
-        .addComponents([
-        new MessageActionRow().addComponents(
-            new TextInputComponent()
-            .setCustomId('nameBox')
-            .setLabel('Answer')
-            .setStyle('SHORT')
-            .setMinLength(3)
-            .setMaxLength(15)
-            .setPlaceholder('Name')
-            .setRequired(true),
-        	)
-        ]);
-		await interaction.showModal(modal);
-		logTxt(`${interaction.user.username} used /join`);
 	}
 });
 

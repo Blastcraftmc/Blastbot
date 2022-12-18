@@ -1,8 +1,8 @@
-const { Client, Intents, MessageEmbed, MessageActionRow, MessageSelectMenu, Modal, TextInputComponent } = require('discord.js');
+const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('fs')
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 function logTxt(data) {
 	fs.appendFile('log.txt', `${data}\n`, function (err) {
@@ -14,7 +14,7 @@ function logTxt(data) {
 	})
 }
 
-client.once('ready', () => {
+client.once(Events.ClientReady, c => {
 	console.log('Ready!');
 	client.channels.cache.get('992810093332676629').send(`Hello there! I'm back up from my grave. Logged in as ${client.user.tag}`)
 	client.user.setActivity('Blastcraft');
@@ -35,7 +35,7 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`, ephemeral: true });
 		logTxt(`${interaction.user.username} used /user`);
 	} else if (commandName === 'help') {
-		const helpEmbed = new MessageEmbed().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
+		const helpEmbed = new EmbedBuilder().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
 		await interaction.reply({ embeds: [helpEmbed], ephemeral: true})
 		logTxt(`${interaction.user.username} used /help`);
 	} else if (commandName === 'activity') {
@@ -49,20 +49,27 @@ client.on('interactionCreate', async interaction => {
 		logTxt(`${interaction.user.username} used /apply`);
 	} else if (commandName === 'ping') {
 		const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-		const pingEmbed = new MessageEmbed().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️Websocket heartbeat:', value: `${client.ws.ping}`, inline: true }, { name: '⌛Roundtrip latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}`, inline: true });
+		const pingEmbed = new EmbedBuilder().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️Websocket heartbeat:', value: `${client.ws.ping}`, inline: true }, { name: '⌛Roundtrip latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}`, inline: true });
 		interaction.editReply({ embeds: [pingEmbed] });
 		logTxt(`${interaction.user.username} used /ping`);
 	} else if (commandName === 'say') {
 		const target = interaction.options.getString('message');
 		const color = interaction.options.getString('color');
-		const sayEmbed = new MessageEmbed().setColor(color).setTitle(`${interaction.user.username} said: ${target}`);
+		const sayEmbed = new EmbedBuilder().setColor(color).setTitle(`${interaction.user.username} said: ${target}`);
 		await interaction.reply({ embeds: [sayEmbed] })
 		logTxt(`${interaction.user.username} used /say to say "${target}"`);
 	} else if (commandName === 'logs') {
 		const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-		const logsEmbed = new MessageEmbed().setColor(0xCE2D4F).setTitle(`Logs at ${date}`);
+		const logsEmbed = new EmbedBuilder().setColor(0xCE2D4F).setTitle(`Logs at ${date}`);
 		await interaction.reply({ embeds: [logsEmbed], files: ["./log.txt"] })
 		logTxt(`${interaction.user.username} used /logs at ${date}`);
+	} else if (commandName === 'mute') {
+		const member = interaction.options.getMember('target');
+		if (member.roles.cache.some(role => role.name === 'Admin')) {
+			console.log("Succeded");
+		} else {
+			console.log("Failed");
+		}
 	}
 });
 

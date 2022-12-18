@@ -17,6 +17,7 @@ function logTxt(data) {
 client.once(Events.ClientReady, c => {
 	console.log('Ready!');
 	client.channels.cache.get('992810093332676629').send(`Hello there! I'm back up from my grave. Logged in as ${client.user.tag}`)
+	client.user.setUsername('Blastbot');
 	client.user.setActivity('Blastcraft');
 });
 
@@ -38,11 +39,11 @@ client.on('interactionCreate', async interaction => {
 		const helpEmbed = new EmbedBuilder().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
 		await interaction.reply({ embeds: [helpEmbed], ephemeral: true})
 		logTxt(`${interaction.user.username} used /help`);
-	} else if (commandName === 'activity') {
-		const target = interaction.options.getString('activityoption');
-		await interaction.reply({ content: `Setting status ${target}`, ephemeral: true})
-		client.user.setActivity(target);
-		logTxt(`${interaction.user.username} used /activity to set "${target}"`);
+	} else if (commandName === 'bot') {
+		const activity = interaction.options.getString('activity');
+		await interaction.reply({ content: `Setting status to ${activity}`, ephemeral: true})
+		client.user.setActivity(activity);
+		logTxt(`${interaction.user.username} used /bot to set Activity: "${activity}"`);
 	} else if (commandName === 'apply') {
 		client.users.send('685599175735378140', `The user "${interaction.user.username}" (${interaction.user.id}) sent a Blastbot developer application`);
 		await interaction.reply({ content: `Applied successfully, await a response in less then a day`, ephemeral: true });

@@ -10,9 +10,10 @@
   "keywords": [],
   "description": "",
   "dependencies": {
-    "14": "^3.1.6",
+    "14": "^1.0.1",
     "@discordjs/builders": "^1.4.0",
     "@discordjs/rest": "^1.5.0",
+    "discord-api-types": "^0.37.23",
     "discord.js": "^14.7.1",
     "install": "^0.13.0",
     "npm": "^9.2.0",

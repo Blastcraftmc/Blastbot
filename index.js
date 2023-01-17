@@ -33,9 +33,11 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: `Server Name: ${interaction.guild.name}\nTotal Members: ${interaction.guild.memberCount}\nDate Created: ${interaction.guild.createdAt}`, ephemeral: true });
 		logTxt(`${interaction.user.username} used /server`);
 	} else if (commandName === 'user') {
+		//TODO add select user
 		await interaction.reply({ content: `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`, ephemeral: true });
 		logTxt(`${interaction.user.username} used /user`);
 	} else if (commandName === 'help') {
+		//TODO update website
 		const helpEmbed = new EmbedBuilder().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
 		await interaction.reply({ embeds: [helpEmbed], ephemeral: true})
 		logTxt(`${interaction.user.username} used /help`);
@@ -54,23 +56,28 @@ client.on('interactionCreate', async interaction => {
 		interaction.editReply({ embeds: [pingEmbed] });
 		logTxt(`${interaction.user.username} used /ping`);
 	} else if (commandName === 'say') {
+		//TODO make admin only
 		const target = interaction.options.getString('message');
 		const color = interaction.options.getString('color');
 		const sayEmbed = new EmbedBuilder().setColor(color).setTitle(`${interaction.user.username} said: ${target}`);
 		await interaction.reply({ embeds: [sayEmbed] })
 		logTxt(`${interaction.user.username} used /say to say "${target}"`);
 	} else if (commandName === 'logs') {
+		//TODO make admin only
 		const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 		const logsEmbed = new EmbedBuilder().setColor(0xCE2D4F).setTitle(`Logs at ${date}`);
 		await interaction.reply({ embeds: [logsEmbed], files: ["./log.txt"] })
 		logTxt(`${interaction.user.username} used /logs at ${date}`);
 	} else if (commandName === 'mute') {
+		//TODO make admin only
 		const member = interaction.options.getMember('target');
 		if (member.roles.cache.some(role => role.name === 'Admin')) {
 			console.log("Succeded");
 		} else {
 			console.log("Failed");
 		}
+	} else if (commandName === 'present') {
+		await interaction.reply({ content: 'https://tenor.com/view/nitro-discord-nitro-gnomed-discord-gif-18776841' })
 	}
 });
 

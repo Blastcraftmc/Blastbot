@@ -13,7 +13,8 @@ const commands = [
 	new SlashCommandBuilder().setName('ping').setDescription("See Blastbot's ping"),
 	new SlashCommandBuilder().setName('say').setDescription("Says message back to you").addStringOption(option => option.setName('message').setDescription('Message').setRequired(true)).addStringOption(option => option.setName('color').setDescription('Embed Color').setRequired(false)),
 	new SlashCommandBuilder().setName('logs').setDescription("Get current log file"),
-	new SlashCommandBuilder().setName('mute').setDescription("Mute user")
+	new SlashCommandBuilder().setName('mute').setDescription("Mute user"),
+	new SlashCommandBuilder().setName('present').setDescription("Delivers a present")
 ]
 	.map(command => command.toJSON());
 

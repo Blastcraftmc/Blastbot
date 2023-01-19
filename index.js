@@ -1,8 +1,16 @@
 const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const { token } = require('./config.json');
-const fs = require('fs')
+const fs = require('fs');
+const { Configuration, OpenAIApi } = require('openai');
+const { token, APIKEY, ORG } = require('./config.json');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const configuration = new Configuration ({
+	apiKey: APIKEY,
+});
+const openai =  new OpenAIApi(configuration);
+
+const client = new Client({ intents: [
+	GatewayIntentBits.Guilds
+] });
 
 function logTxt(data) {
 	fs.appendFile('log.txt', `${data}\n`, function (err) {
@@ -52,7 +60,7 @@ client.on('interactionCreate', async interaction => {
 		logTxt(`${interaction.user.username} used /apply`);
 	} else if (commandName === 'ping') {
 		const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-		const pingEmbed = new EmbedBuilder().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️Websocket heartbeat:', value: `${client.ws.ping}`, inline: true }, { name: '⌛Roundtrip latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}`, inline: true });
+		const pingEmbed = new EmbedBuilder().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️ Websocket heartbeat:', value: `${client.ws.ping}`, inline: true }, { name: '⌛ Roundtrip latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}`, inline: true });
 		interaction.editReply({ embeds: [pingEmbed] });
 		logTxt(`${interaction.user.username} used /ping`);
 	} else if (commandName === 'say') {
@@ -78,10 +86,23 @@ client.on('interactionCreate', async interaction => {
 		}
 	} else if (commandName === 'present') {
 		await interaction.reply({ content: 'https://tenor.com/view/nitro-discord-nitro-gnomed-discord-gif-18776841' })
+	} else if (commandName === 'gpt') {
+		const target = interaction.options.getString('message');
+		const sent = await interaction.reply({ content: 'Working on it...' });
+		const response = await openai.createCompletion({
+			model: "text-davinci-003",
+			prompt: `${target}`,
+			temperature: 0.5,
+			max_tokens: 200,
+			top_p: 1.0,
+			frequency_penalty: 0.5,
+			presence_penalty: 0.0,
+			});
+		const gptEmbed = new EmbedBuilder().setColor("A72608").setTitle(`Chat GPT`).addFields({ name: '🤔 Question:', value: `${target}`}, { name: '💬 Response:', value: `${response.data.choices[0].text}`});
+		await interaction.editReply({ embeds: [gptEmbed] })
 	}
 });
 
 client.login(token);
 
 //node .
-//node index.js

@@ -86,20 +86,30 @@ client.on('interactionCreate', async interaction => {
 		}
 	} else if (commandName === 'present') {
 		await interaction.reply({ content: 'https://tenor.com/view/nitro-discord-nitro-gnomed-discord-gif-18776841' })
+		logTxt(`${interaction.user.username} used /present at ${date}`);
 	} else if (commandName === 'gpt') {
 		const target = interaction.options.getString('message');
 		const sent = await interaction.reply({ content: 'Working on it...' });
-		const response = await openai.createCompletion({
+		try {
+			const response = await openai.createCompletion({
 			model: "text-davinci-003",
 			prompt: `${target}`,
 			temperature: 0.5,
-			max_tokens: 200,
+			max_tokens: 1000,
 			top_p: 1.0,
 			frequency_penalty: 0.5,
 			presence_penalty: 0.0,
 			});
 		const gptEmbed = new EmbedBuilder().setColor("A72608").setTitle(`Chat GPT`).addFields({ name: '🤔 Question:', value: `${target}`}, { name: '💬 Response:', value: `${response.data.choices[0].text}`});
 		await interaction.editReply({ embeds: [gptEmbed] })
+		logTxt(`${interaction.user.username} used /gpt with a prompt of ${message} at ${date}`);
+		} catch (error) {
+			console.log("error");
+			client.channels.cache.get('992810093332676629').send(`Error`)
+			await interaction.editReply({ content: `Error!` })
+			logTxt(`${interaction.user.username} released an error using /gpt with a prompt of ${message} at ${date}`);
+		}
+		
 	}
 });
 

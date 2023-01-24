@@ -102,12 +102,10 @@ client.on('interactionCreate', async interaction => {
 			});
 		const gptEmbed = new EmbedBuilder().setColor("A72608").setTitle(`Chat GPT`).addFields({ name: '🤔 Question:', value: `${target}`}, { name: '💬 Response:', value: `${response.data.choices[0].text}`});
 		await interaction.editReply({ embeds: [gptEmbed] })
-		logTxt(`${interaction.user.username} used /gpt with a prompt of ${message} at ${date}`);
 		} catch (error) {
 			console.log("error");
 			client.channels.cache.get('992810093332676629').send(`Error`)
 			await interaction.editReply({ content: `Error!` })
-			logTxt(`${interaction.user.username} released an error using /gpt with a prompt of ${message} at ${date}`);
 		}
 		
 	}

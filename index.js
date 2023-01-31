@@ -1,10 +1,14 @@
 const { Client, Events, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const fs = require('fs');
 const { Configuration, OpenAIApi } = require('openai');
-const { token, APIKEY, ORG } = require('./config.json');
+require('dotenv').config();
+
+const keys = {
+	token: process.env.token,
+}
 
 const configuration = new Configuration ({
-	apiKey: APIKEY,
+	apiKey: process.env.APIKEY,
 });
 const openai =  new OpenAIApi(configuration);
 
@@ -111,6 +115,6 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-client.login(token);
+client.login(keys.token);
 
 //node .

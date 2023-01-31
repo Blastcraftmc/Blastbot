@@ -15,6 +15,7 @@
     "@discordjs/rest": "^1.5.0",
     "discord-api-types": "^0.37.23",
     "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
     "install": "^0.13.0",
     "npm": "^9.2.0",
     "npm-check-updates": "^16.6.0",

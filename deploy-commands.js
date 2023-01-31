@@ -1,7 +1,13 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
-const { clientId, guildId, token } = require('./config.json');
+require('dotenv').config();
+
+const keys = {
+	clientId: process.env.clientId,
+	guildId: process.env.guildId,
+	token: process.env.token,
+}
 
 const commands = [
 	new SlashCommandBuilder().setName('4k').setDescription("Snaps a picture"),
@@ -19,9 +25,9 @@ const commands = [
 ]
 	.map(command => command.toJSON());
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '9' }).setToken(keys.token);
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+rest.put(Routes.applicationGuildCommands(keys.clientId, keys.guildId), { body: commands })
 	.then(() => console.log('Successfully registered application commands.'))
 	.catch(console.error);
 

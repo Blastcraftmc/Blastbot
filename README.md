@@ -72,7 +72,7 @@ Before using the bots slash command you first need to add them to your Discord s
 
 ## Features & Commands
 
-> Note: The repository now uses the new Discord slash commands
+> Note: Blastbot uses slash commands
 
 * [Play](#play)
 * [Pause](#pause)
@@ -104,8 +104,6 @@ More coming soon!
 
 `/playtop YOUTUBE_URL`  
 `/playtop SONG_NAME`
-
-<img src="./assets/playing_song.png">
 
 ### Pause
 

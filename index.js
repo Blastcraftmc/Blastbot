@@ -47,12 +47,12 @@ client.on('interactionCreate', async interaction => {
 		await interaction.editReply({ content: `Server Name: ${interaction.guild.name}\nTotal Members: ${interaction.guild.memberCount}\nDate Created: ${interaction.guild.createdAt}`, ephemeral: true });
 		logTxt(`${interaction.user.username} used /server`);
 	} else if (commandName === 'user') {
-		//TODO add select user
+		//TODO: add select user
 		const sent = await interaction.reply({ content: 'Working on it...'});
 		await interaction.editReply({ content: `Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`, ephemeral: true });
 		logTxt(`${interaction.user.username} used /user`);
 	} else if (commandName === 'help') {
-		//TODO update website
+		//TODO: update website
 		const sent = await interaction.reply({ content: 'Working on it...'});
 		const helpEmbed = new EmbedBuilder().setColor(`4B0082`).setTitle(`Need Help?`).addFields({ name: 'Slash Commands', value: 'All commands start with /' }, { name: '/ping', value: 'Use /ping to see the bots ping', inline: true }, { name: '/user', value: 'Use /user to get your user info', inline: true }, { name: '/server', value: 'Use /server to get the server info', inline: true }).setURL('http://blastcraft.rf.gd/blastbot');
 		await interaction.editReply({ embeds: [helpEmbed], ephemeral: true})
@@ -74,7 +74,7 @@ client.on('interactionCreate', async interaction => {
 		interaction.editReply({ embeds: [pingEmbed] });
 		logTxt(`${interaction.user.username} used /ping`);
 	} else if (commandName === 'say') {
-		//TODO make admin only
+		//TODO: make admin only
 		const sent = await interaction.reply({ content: 'Working on it...'});
 		const target = interaction.options.getString('message');
 		const color = interaction.options.getString('color');
@@ -82,14 +82,14 @@ client.on('interactionCreate', async interaction => {
 		await interaction.editReply({ embeds: [sayEmbed] })
 		logTxt(`${interaction.user.username} used /say to say "${target}"`);
 	} else if (commandName === 'logs') {
-		//TODO make admin only
+		//TODO: make admin only
 		const sent = await interaction.reply({ content: 'Working on it...'});
 		const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 		const logsEmbed = new EmbedBuilder().setColor(0xCE2D4F).setTitle(`Logs at ${date}`);
 		await interaction.editReply({ embeds: [logsEmbed], files: ["./log.txt"] })
 		logTxt(`${interaction.user.username} used /logs at ${date}`);
 	} else if (commandName === 'mute') {
-		//TODO make admin only
+		//TODO: make admin only
 		const member = interaction.options.getMember('target');
 		if (member.roles.cache.some(role => role.name === 'Admin')) {
 			console.log("Succeded");
@@ -108,7 +108,7 @@ client.on('interactionCreate', async interaction => {
 			model: "text-davinci-003",
 			prompt: `${target}`,
 			temperature: 0.5,
-			max_tokens: 1000,
+			max_tokens: 300,
 			top_p: 1.0,
 			frequency_penalty: 0.5,
 			presence_penalty: 0.0,

@@ -6,7 +6,14 @@ const Discord = require('discord.js');
 const Client = require('./client/Client');
 const config = require('./config.json');
 const { Player } = require('discord-player');
-const { ActivityType } = require('discord.js');
+const { ActivityType, EmbedBuilder } = require('discord.js');
+const { Configuration, OpenAIApi } = require("openai");
+
+//Chat GPT Setup
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 //Client Setup
 const client = new Client();
@@ -74,16 +81,20 @@ client.on('messageCreate', async message => {
   if (message.author.bot || !message.guild) return;
   if (!client.application?.owner) await client.application?.fetch();
 
-  if (message.content === '!deploy' && message.author.id === client.application?.owner?.id) {
-    await message.guild.commands
-      .set(client.commands)
-      .then(() => {
-        message.reply('Deployed!');
-      })
-      .catch(err => {
-        message.reply('Could not deploy commands!');
-        console.error(err);
-      });
+  if (message.content === '!deploy') {
+    if (message.content === '!deploy' && message.author.id === client.application?.owner?.id) {
+      await message.guild.commands
+        .set(client.commands)
+        .then(() => {
+          message.reply('Deployed!');
+        })
+        .catch(err => {
+          message.reply('Could not deploy commands!');
+          console.error(err);
+        });
+    } else {
+        message.reply(`You don't have the right permissions! Now stop trying to commit identity theft and leave.`);
+    }
   }
 });
 
@@ -91,8 +102,30 @@ client.on('interactionCreate', async interaction => {
   const command = client.commands.get(interaction.commandName.toLowerCase());
 
   try {
-    if (interaction.commandName == 'ban' || interaction.commandName == 'userinfo') {
+    if (interaction.commandName == 'ban' || interaction.commandName == 'userinfo' || interaction.commandName == 'apply' || interaction.commandName == 'bot') {
       command.execute(interaction, client);
+    } else if (interaction.commandName == 'ping') {
+		  const sent = await interaction.reply('Pinging...');
+      const pingEmbed = new EmbedBuilder().setColor(0x00FFFF).setTitle(`Pong 🏓`).addFields({ name: '⏱️ API Latency:', value: `${Math.round(client.ws.ping)}ms`, inline: true }, { name: '⌛ Latency:', value: `${sent.createdTimestamp - interaction.createdTimestamp}ms`, inline: true });
+		  await interaction.editReply({ embeds: [pingEmbed] });
+	  } else if (interaction.commandName == 'gpt') {
+      const sent = await interaction.reply('GPTing...');
+      try {
+        runCompletion();
+        async function runCompletion () {
+          const completion = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: "How are you today?",
+        });
+        console.log(completion.data.choices[0].text);
+        await interaction.editReply(completion.data.choices[0].text);
+        }
+      } catch {
+        console.error(error);
+        interaction.followUp({
+          content: 'There was an error trying to execute that command!',
+        });
+      }
     } else {
       command.execute(interaction, player);
     }

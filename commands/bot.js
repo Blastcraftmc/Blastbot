@@ -12,8 +12,10 @@ module.exports = {
     },
     ],
     execute(interaction, client) {
+        const activity = interaction.options.getString('activity');
+        client.user.setActivity(activity);
         interaction.reply({
-            content: `Working on it`,
+            content: `Setting status to ${activity}`,
             ephemeral: true,
         });
     },

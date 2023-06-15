@@ -74,6 +74,8 @@ Before using the bots slash command you first need to add them to your Discord s
 
 > Note: Blastbot uses slash commands
 
+* [4k](#4k)
+* [Apply](#apply)
 * [Play](#play)
 * [Pause](#pause)
 * [Resume](#resume)
@@ -92,6 +94,18 @@ Before using the bots slash command you first need to add them to your Discord s
 * [Ban](#ban)
 * [Purge](#purge)
 More coming soon!
+
+### 4k
+
+📸 Take a "screenshot" of the chat!.
+
+`/4k`
+
+### Apply
+
+📫 Apply to help develop Blastbot.
+
+`/apply`  
 
 ### Play
 
